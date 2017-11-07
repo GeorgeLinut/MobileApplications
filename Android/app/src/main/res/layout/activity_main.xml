@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ubb.glinut.myapplication.MainActivity">
+
+    <EditText
+        android:id="@+id/currencyEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Crypto Currency"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/amountEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:ems="10"
+        android:hint="Price"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/currencyEditText"
+        app:layout_constraintTop_toBottomOf="@+id/currencyEditText" />
+
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="119dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="24dp"
+        android:text="Send Email"
+        app:layout_constraintEnd_toEndOf="@+id/amountEditText"
+        app:layout_constraintStart_toStartOf="@+id/amountEditText"
+        app:layout_constraintTop_toBottomOf="@+id/amountEditText" />
+
+    <Button
+        android:id="@+id/createButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="Modify asset"
+        app:layout_constraintEnd_toEndOf="@+id/sendButton"
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toStartOf="@+id/sendButton"
+        app:layout_constraintTop_toBottomOf="@+id/sendButton" />
+
+    <ListView
+        android:id="@+id/listAssets"
+        android:layout_width="216dp"
+        android:layout_height="180dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/createButton"
+        app:layout_constraintStart_toStartOf="@+id/createButton" />
+
+</android.support.constraint.ConstraintLayout>
