@@ -24,6 +24,10 @@ public class AssetAdapter extends BaseAdapter{
         this.assets = assets;
     }
 
+    public ArrayList<Asset> getAssets() {
+        return assets;
+    }
+
     @Override
     public int getCount() {
         return assets.size();
@@ -53,5 +57,9 @@ public class AssetAdapter extends BaseAdapter{
         amountView.setText(Integer.toString(assets.get(i).getPrice()));
         v.setTag(assets.get(i));
         return v;
+    }
+
+    public void clearAll() {
+        this.assets = new ArrayList<>();
     }
 }

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "112271497710",
+    "firebase_url": "https://coinwatch-efac1.firebaseio.com",
+    "project_id": "coinwatch-efac1",
+    "storage_bucket": "coinwatch-efac1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112271497710:android:5e9c5b6dfdf2f575",
+        "android_client_info": {
+          "package_name": "com.ubb.glinut.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "112271497710-i4g866skhng0jcunpdqu71p9d4tjisqi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ubb.glinut.myapplication",
+            "certificate_hash": "8407f83f6c669d419c2b80d95520b5e38f6f042e"
+          }
+        },
+        {
+          "client_id": "112271497710-khf6kk6tltvi7an4nj21oug6itpocroa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABISVsoBpa3Zacy3fkff284YZkWvSUEyM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "112271497710-khf6kk6tltvi7an4nj21oug6itpocroa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

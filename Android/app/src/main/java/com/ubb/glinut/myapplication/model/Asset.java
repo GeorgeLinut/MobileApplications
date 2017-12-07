@@ -7,19 +7,22 @@ package com.ubb.glinut.myapplication.model;
 public class Asset {
     private String name;
     private int price;
-    private int id;
+    private String id;
 
-    public Asset(String name, int price, int id) {
+    public Asset() {
+    }
+
+    public Asset(String name, int price, String id) {
         this.name = name;
         this.price = price;
         this.id = id;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
