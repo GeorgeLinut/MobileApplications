@@ -2,17 +2,18 @@ package com.ubb.glinut.myapplication;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.os.Build;
 import android.provider.MediaStore;
-import android.support.annotation.RequiresApi;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -31,17 +32,18 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.ubb.glinut.myapplication.adapter.AssetAdapter;
+import com.ubb.glinut.myapplication.animation.BottomNavigationViewHelper;
 import com.ubb.glinut.myapplication.api.CoinMarketApi;
 import com.ubb.glinut.myapplication.model.Asset;
 import com.ubb.glinut.myapplication.model.CoinMarket;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.SimpleTimeZone;
-import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,15 +53,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    private static final String TAG = "MainActivity";
     private AssetAdapter adapter;
     Spinner spinnerCoins;
     private ArrayList<Asset> assets;
     private ListView listView;
     private EditText amountEditText;
-    private
     List<CoinMarket> coinMarkets;
-    List<String>strings = new ArrayList<>();
-    String[] arraySpinner = new String[CoinMarketApi.SPINNER];
 
     DatabaseReference databaseCoins = FirebaseDatabase.getInstance().getReference("coins");
 
@@ -69,17 +70,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         adapter = new AssetAdapter(this, new ArrayList<Asset>());
-        //setup spinner
-        this.arraySpinner = strings.toArray(this.arraySpinner);
-        spinnerCoins = (Spinner) findViewById(R.id.spinnerCoin);
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, arraySpinner);
-        adapter1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        spinnerCoins.setAdapter(adapter1);
+        httpPart();
 
         listView = findViewById(R.id.listAssets);
         listView.setAdapter(adapter);
         assets = new ArrayList<>();
+        spinnerCoins = (Spinner) findViewById(R.id.spinnerCoin);
         amountEditText = (EditText) findViewById(R.id.amountEditText);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -120,6 +116,50 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+        BottomNavigationView buBottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationBar);
+        Menu menu = buBottomNavigationView.getMenu();
+        MenuItem menuItem = menu.getItem(0);
+        menuItem.setChecked(true);
+        buBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.ic_home:
+                        break;
+                    case R.id.ic_money:
+                        Intent intent = new Intent(MainActivity.this, InvestmentActivity.class);
+                        intent.putExtra("numbers", prepareParam());
+                        try {
+                            startActivity(intent);
+                            break;
+                        }
+                        catch (Exception e){
+                            Log.d(TAG, e.getMessage());
+                        }
+                    case R.id.ic_list:
+                        Intent intent1 = new Intent(MainActivity.this, ListActivity.class);
+                        startActivity(intent1);
+                        break;
+                }
+                return false;
+            }
+        });
+    }
+
+    private ArrayList<String> prepareParam() {
+        ArrayList<String> result = new ArrayList<>();
+        for (Asset asset : adapter.getAssets()) {
+            String newOne = "";
+            newOne += asset.getName();
+            newOne += " ";
+            newOne += asset.getPrice();
+            newOne += " ";
+            newOne += asset.getId();
+            result.add(newOne);
+        }
+        return result;
     }
 
     private void addCoin() {
@@ -163,7 +203,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        httpPart();
     }
 
     private void updateAdapter(Map<String, Object> users) {
@@ -188,11 +227,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(dialView);
         final EditText editText = (EditText) dialView.findViewById(R.id.editTextAmount);
         final Button button = (Button) dialView.findViewById(R.id.buttonUpdate);
-        this.arraySpinner = strings.toArray(this.arraySpinner);
         final Spinner spinnerUpdate = (Spinner) dialView.findViewById(R.id.spinnerUpdate);
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, arraySpinner);
-        spinnerUpdate.setAdapter(adapter1);
         final Button deleteButton = (Button) dialView.findViewById(R.id.buttonDelete);
 
         builder.setTitle("Updating asset");
@@ -238,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void httpPart(){
+    private void httpPart() {
         //Http part init
         GsonBuilder builder = new GsonBuilder();
 
@@ -254,32 +289,22 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create(builder.create()))
                 .build();
         CoinMarketApi api = retrofit.create(CoinMarketApi.class);
-
         try {
             Call<List<CoinMarket>> call = api.getCoins();
             call.enqueue(new Callback<List<CoinMarket>>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onResponse(Call<List<CoinMarket>> call, Response<List<CoinMarket>> response) {
                     coinMarkets = response.body();
-                    //does not work because my broke ass phone has android < 7
-//                    strings = coinMarkets.stream()
-//                            .map(t->t.getName())
-//                            .limit(CoinMarketApi.SPINNER)
-//                            .collect(Collectors.toList());
-                    for (int i=0;i<CoinMarketApi.SPINNER;i++){
-                        strings.add(coinMarkets.get(i).getName());
-                    }
+                    Log.v("coins", coinMarkets.toString());
                 }
 
                 @Override
                 public void onFailure(Call<List<CoinMarket>> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
-        }
-        catch (Exception e){
-            Log.d("aici",e.getMessage());
+        } catch (Exception e) {
+            Log.d("aici", e.getMessage());
         }
     }
 }

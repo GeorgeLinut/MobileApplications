@@ -2,6 +2,7 @@ package com.ubb.glinut.myapplication.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
@@ -9,7 +10,7 @@ import java.util.Date;
  * Created by glinut on 12/6/2017.
  */
 
-public class CoinMarket {
+public class CoinMarket implements Serializable {
     private String id;
     private String name;
     private String symbol;
