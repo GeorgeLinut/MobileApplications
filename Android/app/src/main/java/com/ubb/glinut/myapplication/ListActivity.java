@@ -50,12 +50,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ListActivity extends AppCompatActivity {
     private ListView listView;
 
+    ArrayList<String> assets = new ArrayList<>();
     ArrayList<CoinMarket> coinMarkets = new ArrayList<>();
     CoinMarketAdapter adapter = new CoinMarketAdapter(this,coinMarkets);
     private static final String TAG = "ListActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Bundle extras = getIntent().getExtras();
+        assets= extras.getStringArrayList("numbers");
         httpPart();
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: started");
@@ -89,6 +92,7 @@ public class ListActivity extends AppCompatActivity {
                         break;
                     case R.id.ic_money:
                         Intent intent = new Intent(ListActivity.this,InvestmentActivity.class);
+                        intent.putExtra("numbers", assets);
                         startActivity(intent);
                         break;
                     case R.id.ic_list:

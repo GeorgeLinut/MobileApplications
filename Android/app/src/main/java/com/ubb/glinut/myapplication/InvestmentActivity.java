@@ -101,6 +101,7 @@ public class InvestmentActivity extends AppCompatActivity {
                         break;
                     case R.id.ic_list:
                         Intent intent1 = new Intent(InvestmentActivity.this,ListActivity.class);
+                        intent1.putExtra("numbers", assets);
                         startActivity(intent1);
                         break;
                 }

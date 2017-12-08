@@ -75,6 +75,29 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.listAssets);
         listView.setAdapter(adapter);
         assets = new ArrayList<>();
+        databaseCoins.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                databaseCoins.addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                //Get map of users in datasnapshot
+                                updateAdapter((Map<String, Object>) dataSnapshot.getValue());
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                //handle databaseError
+                            }
+                        });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         spinnerCoins = (Spinner) findViewById(R.id.spinnerCoin);
         amountEditText = (EditText) findViewById(R.id.amountEditText);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -131,15 +154,13 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.ic_money:
                         Intent intent = new Intent(MainActivity.this, InvestmentActivity.class);
                         intent.putExtra("numbers", prepareParam());
-                        try {
-                            startActivity(intent);
-                            break;
-                        }
-                        catch (Exception e){
-                            Log.d(TAG, e.getMessage());
-                        }
+                        startActivity(intent);
+                        break;
+
+
                     case R.id.ic_list:
                         Intent intent1 = new Intent(MainActivity.this, ListActivity.class);
+                        intent1.putExtra("numbers", prepareParam());
                         startActivity(intent1);
                         break;
                 }
@@ -180,29 +201,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        databaseCoins.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                databaseCoins.addListenerForSingleValueEvent(
-                        new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                //Get map of users in datasnapshot
-                                updateAdapter((Map<String, Object>) dataSnapshot.getValue());
-                            }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                //handle databaseError
-                            }
-                        });
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     private void updateAdapter(Map<String, Object> users) {
